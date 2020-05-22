@@ -2,7 +2,7 @@
 
 ## Benutzung
 
-Die Dateien in den Serververzeichnis kopieren und die URL-Zuordnung in der Datei `mapping.php` vornehmen.
+Die Dateien in das Serververzeichnis kopieren und die URL-Zuordnung in der Datei `mapping.php` vornehmen.
 Z.B.:
 
 ``` php
@@ -12,7 +12,7 @@ $urlMapping = array(
 );
 ```
 
-Dankach können die kurze URLs wie folgt aufgerufen werden (die Groß-Kleinschreibung ist dabei egal):
+Danach können die kurze URLs wie folgt aufgerufen werden (die Groß-Kleinschreibung ist dabei egal):
 
 * `https://menserver.de/url1`
 * `https://menserver.de/URL2`
