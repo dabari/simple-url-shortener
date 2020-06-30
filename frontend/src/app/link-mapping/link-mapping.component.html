@@ -1,0 +1,85 @@
+<div *ngIf="errorMessage" class="alert alert-danger" style="margin-top: 10px;">{{ errorMessage }}</div>
+<div *ngIf="successMessage" class="alert alert-success" style="margin-top: 10px;">{{ successMessage }}</div>
+
+<div id="theList" class="list">
+
+  <div class="list-group" *ngIf="hasItems()">
+    <h2>Aktuelle Links</h2>
+    <div *ngFor="let item of linkMappingData | keyvalue" class="list-group-item row">
+      <span class="col-12 help-block danger" style="float: left;" *ngIf="shortLink.touched && shortLink.invalid">
+        "Short Link" kann nur folgende Zeichen enthalten: [a-z, A-Z, 0-9, _, -] (z.B. "Bistro_1" aber nicht "Bistro 1")
+      </span>
+      <div class="col-2" style="float: left;">
+        <input type="text"
+          [(ngModel)]="item.key"
+          class="form-control"
+          required
+          pattern="^[0-9a-zA-Z\-_]+$"
+          #shortLink="ngModel"
+          [ngClass]="{ 'is-invalid': shortLink.touched && shortLink.invalid }"/>
+      </div>
+      <div class="col-7" style="float: left;">
+        <input type="text"
+          [(ngModel)]="item.value"
+          class="form-control"
+          required
+          #targetUrl="ngModel"
+          [ngClass]="{ 'is-invalid': targetUrl.touched && targetUrl.invalid }"/>
+      </div>
+      <div class="col-3" style="float: left;">
+        <input type="button" style="float: right;"
+          value="Löschen"
+          class="btn btn-danger btn-sm"
+          (click)="deleteLink(item.key)"/>
+        <span style="float: right; margin: 5px;"></span>
+        <input type="button" style="float: right;"
+          value="Ändern"
+          class="btn btn-success btn-sm"
+          [disabled]="shortLink.invalid || targetUrl.invalid"
+          (click)="updateLinkMapping(shortLink.value, targetUrl.value)"/>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="theForm" class="form">
+  <h2>Einen ne<span (click)="getLinkMapping()" style="cursor: pointer;">u</span>en Link-Eintrag hinzufügen</h2>
+  <form #f="ngForm" name="theForm" (submit)="addLinkMapping(f)">
+    <div class="form-group">
+      <label>Short Link</label>
+      <input type="text" (ngModelChange)="onShortLinkChange(formShortLink)"
+            class="form-control"
+            name="shortLink"
+            [(ngModel)]="shortLink"
+            #formShortLink="ngModel"
+            required
+            pattern="^[0-9a-zA-Z\-_]+$">
+      <span class="help-block danger" *ngIf="formShortLink.errors?.required && formShortLink.touched">
+        Bitte einen Kurzen Link eintragen (z.B. Lobpreis oder Bistro)
+      </span>
+      <span class="help-block danger" *ngIf="formShortLink.errors?.pattern && formShortLink.touched">
+        "Short Link" kann nur folgende Zeichen enthalten: [a-z, A-Z, 0-9, _, -] (z.B. "Bistro_1" aber nicht "Bistro 1")
+      </span>
+      <span class="help-block danger" *ngIf="formShortLink.errors?.linkExists && formShortLink.touched">
+        "Short Link" existiert bereits!
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label>Target URL</label>
+      <input type="text"
+            class="form-control"
+            name="targetUrl"
+            required
+            [(ngModel)]="targetUrl"
+            #formTargetUrl="ngModel">
+      <span class="help-block danger" *ngIf="formTargetUrl.errors?.required && formTargetUrl.touched">
+        Bitte die passende URL-Adresse eingeben (z.B. https://www.youtube.com/watch?v=lfDwqY1l4UU)
+      </span>
+    </div>
+
+    <button
+        class="btn btn-primary btn-sm"
+        [disabled]="f.invalid">Link erstellen</button>
+  </form>
+</div>

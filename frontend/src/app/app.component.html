@@ -1,0 +1,6 @@
+<app-header *ngIf="(authenticated$ | async)"></app-header>
+<div class="container">
+  <h1>link<span class="r">egp</span></h1>
+  <app-link-mapping *ngIf="(authenticated$ | async)"></app-link-mapping>
+  <app-login *ngIf="!(authenticated$ | async)"></app-login>
+</div>

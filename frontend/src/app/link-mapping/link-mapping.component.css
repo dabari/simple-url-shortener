@@ -1,0 +1,14 @@
+.danger {
+  color: red;
+}
+
+.list {
+  padding: 12px;
+}
+
+.form {
+  padding: 10px;
+  margin: 50px;
+  background-color: white;
+  border-radius: .25rem;
+}

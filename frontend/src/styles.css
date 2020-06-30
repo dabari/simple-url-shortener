@@ -1,0 +1,89 @@
+/* You can add global styles to this file, and also import other style files */
+/* reset */
+
+/* site */
+html,
+body {
+  background-color: rgb(247, 170, 50);
+  margin: 8px;
+}
+a {
+  color: darkblue;
+  text-decoration: none;
+}
+
+#pagewrap {
+  margin: 0 auto;
+  width: 405px;
+}
+
+h1 {
+  color: white;
+  margin: 0;
+  text-align: center;
+  font-size: 100px;
+}
+h1 .r {
+  color: darkblue;
+}
+
+.body {
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  background-color: white;
+  text-align: center;
+  padding: 50px;
+  height: 80px;
+  position: relative;
+}
+
+.body .instructions {
+  display: block;
+  margin-bottom: 10px;
+}
+.body .back {
+  right: 15px;
+  top: 10px;
+  position: absolute;
+}
+
+.body input[type="text"] {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 5px;
+  text-align: center;
+  padding: 5px;
+  height: 20px;
+  width: 300px;
+}
+
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .checkbox {
+  font-weight: 400;
+}
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
