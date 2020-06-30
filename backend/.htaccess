@@ -4,9 +4,9 @@ RewriteEngine On
 Options -Indexes
 
 # wenn kein https aufruf
-#RewriteCond %{SERVER_PORT} !^443
+RewriteCond %{SERVER_PORT} !^443
 # dann auf https umleiten
-#RewriteRule ^(.*)$ https://link.eg-p.de/$1 [R=301,L]
+RewriteRule ^(.*)$ https://link.eg-p.de/$1 [R=301,L]
 
 RewriteCond %{SCRIPT_FILENAME} !-d
 RewriteCond %{SCRIPT_FILENAME} !-f
