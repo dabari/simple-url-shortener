@@ -2,16 +2,16 @@ import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
 import { NgForm, NgModel, FormControl } from "@angular/forms";
 import { Subject } from "rxjs";
 import { takeUntil, debounceTime } from "rxjs/operators";
-import { LinkMappingService } from '../link-mapping.service';
-import { EventManagerService } from '../event-manager.service';
+import { LinkMappingService } from "../link-mapping.service";
+import { EventManagerService } from "../event-manager.service";
 
 @Component({
-  selector: 'app-link-mapping',
-  templateUrl: './link-mapping.component.html',
-  styleUrls: ['./link-mapping.component.css']
+  selector: "app-link-mapping",
+  templateUrl: "./link-mapping.component.html",
+  styleUrls: ["./link-mapping.component.css"],
 })
 export class LinkMappingComponent implements OnInit {
-  linkMappingData: ILinkMapping<string>;
+  linkMappingData: ILinkMapping[] = [];
   shortLink = "";
   targetUrl = "";
 
@@ -59,63 +59,79 @@ export class LinkMappingComponent implements OnInit {
 
   getLinkMapping(): void {
     this.linkMappingService.getAll().subscribe(
-      (res: ILinkMapping<string>) => {
+      (res: ILinkMapping[]) => {
         this.linkMappingData = res;
       },
-      err => this.broadcastError(err)
+      (err) => this.broadcastError(err)
     );
   }
 
   addLinkMapping(form: NgForm) {
     this.resetErrors();
-
-    this.linkMappingService.store(this.shortLink, this.targetUrl).subscribe(
-      (res: ILinkMapping<string>) => {
+    const data: ILinkMapping = {
+      id: null,
+      shortLink: this.shortLink,
+      targetUrl: this.targetUrl,
+    };
+    this.linkMappingService.store(data).subscribe(
+      (res: ILinkMapping[]) => {
         this.linkMappingData = res;
         this.broadcastSuccess("Created successfully");
         // Reset the form
         form.reset();
       },
-      err => this.broadcastError(err)
+      (err) => this.broadcastError(err)
     );
   }
 
-  updateLinkMapping(shortLink: string, targetUrl: string) {
+  updateLinkMapping(id: number, shortLink: string, targetUrl: string) {
     this.resetErrors();
-
-    this.linkMappingService.update(shortLink, targetUrl).subscribe(
-      (res: ILinkMapping<string>) => {
+    const data: ILinkMapping = {
+      id: id,
+      shortLink: shortLink,
+      targetUrl: targetUrl,
+    };
+    this.linkMappingService.update(data).subscribe(
+      (res: ILinkMapping[]) => {
         this.linkMappingData = res;
         this.broadcastSuccess("Updated successfully");
       },
-      err => this.broadcastError(err)
+      (err) => this.broadcastError(err)
     );
   }
 
-  deleteLink(shortLink: string) {
+  deleteLink(id: number) {
     this.resetErrors();
 
-    this.linkMappingService.delete(shortLink).subscribe(
-      (res: ILinkMapping<string>) => {
+    this.linkMappingService.delete(id).subscribe(
+      (res: ILinkMapping[]) => {
         this.linkMappingData = res;
         this.broadcastSuccess("Deleted successfully");
       },
-      err => this.broadcastError(err)
+      (err) => this.broadcastError(err)
     );
   }
 
-  onShortLinkChange(model: NgModel) {
+  onShortLinkChange(id: number, model: NgModel) {
     const value = model.value;
-    const form: FormControl = model.control;
+    const formControl: FormControl = model.control;
 
-    if (this.linkMappingData && this.linkMappingData[value]) {
-      form.setErrors({ linkExists: true });
+    if (this.linkMappingData && this.existsShortLink(value)) {
+      formControl.setErrors({ linkExists: true });
     }
+  }
+
+  private existsShortLink(value: string){
+    const result = this.linkMappingData.filter(x => x.shortLink === value);
+    if (result) {
+      return result.length > 1;
+    }
+    return false;
   }
 
   hasItems(): boolean {
     if (this.linkMappingData) {
-      return Object.keys(this.linkMappingData).length > 0;
+      return this.linkMappingData.length > 0;
     }
     return false;
   }

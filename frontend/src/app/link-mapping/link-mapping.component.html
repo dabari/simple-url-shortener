@@ -5,13 +5,17 @@
 
   <div class="list-group" *ngIf="hasItems()">
     <h2>Aktuelle Links</h2>
-    <div *ngFor="let item of linkMappingData | keyvalue" class="list-group-item row">
-      <span class="col-12 help-block danger" style="float: left;" *ngIf="shortLink.touched && shortLink.invalid">
+    <div *ngFor="let item of linkMappingData" class="list-group-item row">
+      <span class="col-12 help-block danger" style="float: left;" *ngIf="shortLink.errors?.pattern && shortLink.touched">
         "Short Link" kann nur folgende Zeichen enthalten: [a-z, A-Z, 0-9, _, -] (z.B. "Bistro_1" aber nicht "Bistro 1")
+      </span>
+      <span class="col-12 help-block danger" style="float: left;" *ngIf="shortLink.errors?.linkExists && shortLink.touched">
+        "Short Link" existiert bereits!
       </span>
       <div class="col-2" style="float: left;">
         <input type="text"
-          [(ngModel)]="item.key"
+          [(ngModel)]="item.shortLink"
+          (ngModelChange)="onShortLinkChange(item.id, shortLink)"
           class="form-control"
           required
           pattern="^[0-9a-zA-Z\-_]+$"
@@ -20,7 +24,7 @@
       </div>
       <div class="col-7" style="float: left;">
         <input type="text"
-          [(ngModel)]="item.value"
+          [(ngModel)]="item.targetUrl"
           class="form-control"
           required
           #targetUrl="ngModel"
@@ -30,13 +34,13 @@
         <input type="button" style="float: right;"
           value="Löschen"
           class="btn btn-danger btn-sm"
-          (click)="deleteLink(item.key)"/>
+          (click)="deleteLink(item.id)"/>
         <span style="float: right; margin: 5px;"></span>
         <input type="button" style="float: right;"
           value="Ändern"
           class="btn btn-success btn-sm"
           [disabled]="shortLink.invalid || targetUrl.invalid"
-          (click)="updateLinkMapping(shortLink.value, targetUrl.value)"/>
+          (click)="updateLinkMapping(item.id, shortLink.value, targetUrl.value)"/>
       </div>
     </div>
   </div>
@@ -47,7 +51,8 @@
   <form #f="ngForm" name="theForm" (submit)="addLinkMapping(f)">
     <div class="form-group">
       <label>Short Link</label>
-      <input type="text" (ngModelChange)="onShortLinkChange(formShortLink)"
+      <input type="text"
+            (ngModelChange)="onShortLinkChange(-1, formShortLink)"
             class="form-control"
             name="shortLink"
             [(ngModel)]="shortLink"

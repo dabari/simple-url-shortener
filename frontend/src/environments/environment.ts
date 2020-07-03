@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  serverApiUrl: "http://php.local/short/api/"
+  serverApiUrl: "http://php.local/short/backend/api/"
 };
 
 /*

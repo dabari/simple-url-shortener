@@ -1,5 +1,7 @@
-interface ILinkMapping<T> {
-  [id: string]: T;
+interface ILinkMapping {
+  id: number|null;
+  shortLink: string;
+  targetUrl: string;
 }
 
 interface IUser {

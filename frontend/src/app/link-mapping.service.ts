@@ -14,16 +14,15 @@ import { environment } from 'src/environments/environment';
 })
 export class LinkMappingService {
   private BASE_URL = environment.serverApiUrl;
-  //baseUrl = "http://php.local/short/api/";
 
-  linkMapping: ILinkMapping<string> = {};
+  linkMapping: ILinkMapping[] = [];
 
   constructor(private http: HttpClient) {}
 
-  getAll(): Observable<ILinkMapping<string>> {
+  getAll(): Observable<ILinkMapping[]> {
     return this.http.get(`${this.BASE_URL}mapping`).pipe(
       map((res) => {
-        this.linkMapping = res as ILinkMapping<string>;
+        this.linkMapping = res as ILinkMapping[];
         return this.linkMapping;
       }),
       catchError(this.handleError)
@@ -31,13 +30,11 @@ export class LinkMappingService {
   }
 
   store(
-    shortLink: string,
-    targetUrl: string
-  ): Observable<ILinkMapping<string>> {
-    const data = { shortLink, targetUrl };
-    return this.http.post(`${this.BASE_URL}mapping`, data).pipe(
+    linkMapping: ILinkMapping
+  ): Observable<ILinkMapping[]> {
+    return this.http.post(`${this.BASE_URL}mapping`, linkMapping).pipe(
       map((res) => {
-        this.linkMapping = res as ILinkMapping<string>;
+        this.linkMapping = res as ILinkMapping[];
         return this.linkMapping;
       }),
       catchError(this.handleError)
@@ -45,25 +42,24 @@ export class LinkMappingService {
   }
 
   update(
-    shortLink: string,
-    targetUrl: string
-  ): Observable<ILinkMapping<string>> {
-    const data = { shortLink, targetUrl };
-    return this.http.put(`${this.BASE_URL}mapping`, data).pipe(
+    linkMapping: ILinkMapping
+  ): Observable<ILinkMapping[]> {
+
+    return this.http.put(`${this.BASE_URL}mapping`, linkMapping).pipe(
       map((res) => {
-        this.linkMapping = res as ILinkMapping<string>;
+        this.linkMapping = res as ILinkMapping[];
         return this.linkMapping;
       }),
       catchError(this.handleError)
     );
   }
 
-  delete(shortLink: string): Observable<ILinkMapping<string>> {
-    const params = new HttpParams().set("shortLink", shortLink);
+  delete(id: number): Observable<ILinkMapping[]> {
+    const params = new HttpParams().set("id", `${id}`);
 
     return this.http.delete(`${this.BASE_URL}mapping`, { params }).pipe(
       map((res) => {
-        this.linkMapping = res as ILinkMapping<string>;
+        this.linkMapping = res as ILinkMapping[];
         return this.linkMapping;
       }),
       catchError(this.handleError)
