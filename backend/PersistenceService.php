@@ -23,4 +23,48 @@ class PersistenceService {
 			}
 		}
 	}	
+
+	public function getById($mappingData, $id){
+		return $this->find($mappingData, "id", $id);
+	}
+
+	public function updateIds($mappingData){
+		$id = 0;
+		foreach($mappingData as $arr)
+		{
+			$arr->id = ++$id;
+		}
+	}
+
+	/**
+	 * Gets the next id from mapping data
+	 */
+	public function getNextId($mappingData){
+		$keyToSearch = "id";
+		$currentMax = NULL;
+		foreach($mappingData as $arr)
+		{		
+			foreach($arr as $key => $value)
+			{
+				if ($key == $keyToSearch && ($value >= $currentMax))
+				{
+					$currentMax = $value;
+				}
+			}
+		}
+		return $currentMax + 1;
+	}
+
+	public function existsShortLink($mappingData, $searchValue){
+		$found = $this->find($mappingData, "shortLink", $searchValue);
+		return !empty($found);
+	}
+
+	private function find($data, $searchField, $searchValue){
+		$found = array_filter($data, function($v,$k) use ($searchField, $searchValue) {
+			return $v[$searchField] == $searchValue;  
+		}, ARRAY_FILTER_USE_BOTH);
+		return $found;
+	}
+
 }

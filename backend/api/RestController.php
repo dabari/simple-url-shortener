@@ -56,7 +56,7 @@ Route::add('/mapping', function () {
 	$accountRestHandler = new AccountRestHandler();
 	if ($accountRestHandler->checkPermission()) {
 		$linkMappingRestHandler = new LinkMappingRestHandler();
-		$linkMappingRestHandler->delete($_GET["shortLink"]);
+		$linkMappingRestHandler->delete($_GET["id"]);
 	}
 }, 'DELETE');
 
@@ -94,7 +94,7 @@ Route::methodNotAllowed(function ($path, $method) {
 
 // set CORS-origin policy for development at localhost (angular-server)
 // please comment\delete this line in the production !!!
-// header("Access-Control-Allow-Origin: http://localhost:4200");
+header("Access-Control-Allow-Origin: http://localhost:4200");
 
 // Run the Router
 Route::run();

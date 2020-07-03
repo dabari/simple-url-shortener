@@ -36,8 +36,8 @@ $urlMapping = $persistenceService->getAllData();
 // Wir schauen so nach dem key...
 foreach ($urlMapping as $key => $value) {
     // ...damit es auch einen Treffer gibt wenn die klein-groß-schreibung nicht beachtet wurde
-    if (strtolower($key) == strtolower($short)) {
-        $url = $value;
+    if (strtolower($value["shortLink"]) == strtolower($short)) {
+        $url = $value["targetUrl"];
     }
 }
 
