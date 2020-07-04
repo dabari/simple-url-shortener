@@ -9,6 +9,9 @@
       <span class="col-12 help-block danger" style="float: left;" *ngIf="shortLink.errors?.pattern && shortLink.touched">
         "Short Link" kann nur folgende Zeichen enthalten: [a-z, A-Z, 0-9, _, -] (z.B. "Bistro_1" aber nicht "Bistro 1")
       </span>
+      <span class="col-12 help-block danger" style="float: left;" *ngIf="shortLink.errors?.required && shortLink.touched">
+        Bitte Feld ausfüllen!
+      </span>
       <span class="col-12 help-block danger" style="float: left;" *ngIf="shortLink.errors?.linkExists && shortLink.touched">
         "Short Link" existiert bereits!
       </span>

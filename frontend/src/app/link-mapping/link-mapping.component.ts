@@ -116,17 +116,16 @@ export class LinkMappingComponent implements OnInit {
     const value = model.value;
     const formControl: FormControl = model.control;
 
-    if (this.linkMappingData && this.existsShortLink(value)) {
+    if (this.linkMappingData && this.existsShortLink(id, value)) {
       formControl.setErrors({ linkExists: true });
     }
   }
 
-  private existsShortLink(value: string){
-    const result = this.linkMappingData.filter(x => x.shortLink === value);
-    if (result) {
-      return result.length > 1;
-    }
-    return false;
+  private existsShortLink(id: number, value: string){
+    const result = this.linkMappingData.filter(x => {
+      return x.shortLink === value && x.id !== id;
+    });
+    return result.length > 0;
   }
 
   hasItems(): boolean {
