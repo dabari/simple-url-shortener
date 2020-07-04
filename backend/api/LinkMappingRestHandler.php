@@ -8,12 +8,7 @@ class LinkMappingRestHandler extends SimpleRest
 	{
 		$persistenceService = new PersistenceService();
 		$rawData = $persistenceService->getAllData();
-
-		$statusCode = 200;
-		if (empty($rawData)) {
-			$rawData = new stdclass();
-		} 
-		$this->encodeResponse($rawData, $statusCode);
+		$this->encodeResponse($rawData, 200);
 	}
 
 	public function add()
