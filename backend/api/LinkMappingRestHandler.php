@@ -26,8 +26,8 @@ class LinkMappingRestHandler extends SimpleRest
 					$jsonPayload->id = $persistenceService->getNextId($existingData);
 					array_push($existingData, $jsonPayload);
 					$persistenceService->saveToFile($existingData);
-					$this->encodeResponse($jsonPayload, 201);
 					header("Location: /api/mapping/". $jsonPayload->id);
+					$this->encodeResponse($jsonPayload, 201);
 				}
 			}
 		} else {
