@@ -1,5 +1,5 @@
 interface ILinkMapping {
-  id: number|null;
+  id?: number|null;
   shortLink: string;
   targetUrl: string;
 }

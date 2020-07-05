@@ -37,7 +37,7 @@
         <input type="button" style="float: right;"
           value="Löschen"
           class="btn btn-danger btn-sm"
-          (click)="deleteLink(item.id)"/>
+          (click)="deleteLinkMapping(item.id)"/>
         <span style="float: right; margin: 5px;"></span>
         <input type="button" style="float: right;"
           value="Ändern"
@@ -51,7 +51,7 @@
 
 <div id="theForm" class="form">
   <h2>Einen ne<span (click)="getLinkMapping()" style="cursor: pointer;">u</span>en Link-Eintrag hinzufügen</h2>
-  <form #f="ngForm" name="theForm" (submit)="addLinkMapping(f)">
+  <form #f="ngForm" name="theForm" (submit)="createLinkMapping(f)">
     <div class="form-group">
       <label>Short Link</label>
       <input type="text"

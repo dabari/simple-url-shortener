@@ -15,68 +15,55 @@ import { environment } from 'src/environments/environment';
 export class LinkMappingService {
   private BASE_URL = environment.serverApiUrl;
 
-  linkMapping: ILinkMapping[] = [];
-
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<ILinkMapping[]> {
     return this.http.get(`${this.BASE_URL}mapping`).pipe(
       map((res) => {
-        this.linkMapping = res as ILinkMapping[];
-        return this.linkMapping;
+        return res as ILinkMapping[];
       }),
       catchError(this.handleError)
     );
   }
 
-  store(
+  create(
     linkMapping: ILinkMapping
-  ): Observable<ILinkMapping[]> {
+  ): Observable<ILinkMapping> {
     return this.http.post(`${this.BASE_URL}mapping`, linkMapping).pipe(
       map((res) => {
-        this.linkMapping = res as ILinkMapping[];
-        return this.linkMapping;
+        return res as ILinkMapping;
       }),
       catchError(this.handleError)
     );
   }
 
-  update(
+  update(id: number,
     linkMapping: ILinkMapping
-  ): Observable<ILinkMapping[]> {
+  ): Observable<ILinkMapping> {
 
-    return this.http.put(`${this.BASE_URL}mapping`, linkMapping).pipe(
+    return this.http.put(`${this.BASE_URL}mapping/${id}`, linkMapping).pipe(
       map((res) => {
-        this.linkMapping = res as ILinkMapping[];
-        return this.linkMapping;
+        return res as ILinkMapping;
       }),
       catchError(this.handleError)
     );
   }
 
   delete(id: number): Observable<ILinkMapping[]> {
-    const params = new HttpParams().set("id", `${id}`);
-
-    return this.http.delete(`${this.BASE_URL}mapping`, { params }).pipe(
+    return this.http.delete(`${this.BASE_URL}mapping/${id}`).pipe(
       map((res) => {
-        this.linkMapping = res as ILinkMapping[];
-        return this.linkMapping;
+        return res as ILinkMapping[];
       }),
       catchError(this.handleError)
     );
   }
 
   private handleError(error: HttpErrorResponse) {
-    console.log(error);
-
     switch (error.status) {
       case 401:
         return throwError("Unauthorized API Access");
       default:
         return throwError(error.message);
     }
-
-
-
   }
 }

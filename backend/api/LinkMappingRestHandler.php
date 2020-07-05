@@ -26,7 +26,8 @@ class LinkMappingRestHandler extends SimpleRest
 					$jsonPayload->id = $persistenceService->getNextId($existingData);
 					array_push($existingData, $jsonPayload);
 					$persistenceService->saveToFile($existingData);
-					$this->encodeResponse($persistenceService->getAllData(), 200);
+					$this->encodeResponse($jsonPayload, 201);
+					header("Location: /api/mapping/". $jsonPayload->id);
 				}
 			}
 		} else {
@@ -34,30 +35,34 @@ class LinkMappingRestHandler extends SimpleRest
 		}
 	}
 
-	public function update()
+	public function update($id)
 	{
 		$persistenceService = new PersistenceService();
+		if (isset($id)) {
+			$jsonPayload = $this->getJsonPayload();
 
-		$jsonPayload = $this->getJsonPayload();
-
-		if (!empty($jsonPayload)) {
-			if (isset($jsonPayload->id) && isset($jsonPayload->shortLink) && isset($jsonPayload->targetUrl)) {
-				$existingData = $persistenceService->getAllData();
-				foreach($existingData as $key => $item)
-				{
-					if ($item["id"] == $jsonPayload->id) {
-						$existingData[$key]["shortLink"] = $jsonPayload->shortLink;
-						$existingData[$key]["targetUrl"] = $jsonPayload->targetUrl;
-						$persistenceService->saveToFile($existingData);
-						$this->encodeResponse($persistenceService->getAllData(), 200);
-						return;
+			if (!empty($jsonPayload)) {
+				if (isset($jsonPayload->shortLink) && isset($jsonPayload->targetUrl)) {
+					$existingData = $persistenceService->getAllData();
+					foreach($existingData as $key => $item)
+					{
+						if ($item["id"] == $id) {
+							$existingData[$key]["shortLink"] = $jsonPayload->shortLink;
+							$existingData[$key]["targetUrl"] = $jsonPayload->targetUrl;
+							$persistenceService->saveToFile($existingData);
+							$jsonPayload->id = $id;
+							$this->encodeResponse($jsonPayload, 200);
+							return;
+						}
 					}
+					$this->encodeResponse(array('error' => 'Id ' . $id . ' not found!'), 404);		
 				}
-				$this->encodeResponse(array('error' => 'Id ' . $jsonPayload->id . ' not found!'), 404);		
+			} else {
+				$this->encodeResponse(array('error' => 'Data not valid!'), 204);
 			}
-		} else {
-			$this->encodeResponse(array('error' => 'Data not valid!'), 204);
-		}
+		}else {
+			$this->encodeResponse(array('error' => 'Id not set!'), 400);
+		}		
 	}
 
 	public function addAll()

@@ -22,7 +22,7 @@ if (!isset($_GET["path"])) {
 Route::add('/authenticate', function () {
 	$accountRestHandler = new AccountRestHandler();
 	$accountRestHandler->authenticate();
-}, ['POST']);
+}, 'POST');
 
 // get all mappings
 Route::add('/mapping', function () {
@@ -43,20 +43,20 @@ Route::add('/mapping', function () {
 }, 'POST');
 
 // update mapping
-Route::add('/mapping', function () {
+Route::add('/mapping/([0-9]*)', function ($id) {
 	$accountRestHandler = new AccountRestHandler();
 	if ($accountRestHandler->checkPermission()) {
 		$linkMappingRestHandler = new LinkMappingRestHandler();
-		$linkMappingRestHandler->update();
+		$linkMappingRestHandler->update($id);
 	}
 }, 'PUT');
 
 // delete mapping
-Route::add('/mapping', function () {
+Route::add('/mapping/([0-9]*)', function ($id) {
 	$accountRestHandler = new AccountRestHandler();
 	if ($accountRestHandler->checkPermission()) {
 		$linkMappingRestHandler = new LinkMappingRestHandler();
-		$linkMappingRestHandler->delete($_GET["id"]);
+		$linkMappingRestHandler->delete($id);
 	}
 }, 'DELETE');
 

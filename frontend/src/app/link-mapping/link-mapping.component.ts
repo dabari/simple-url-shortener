@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
 import { NgForm, NgModel, FormControl } from "@angular/forms";
-import { Subject } from "rxjs";
-import { takeUntil, debounceTime } from "rxjs/operators";
+import { Subject, throwError } from "rxjs";
+import { takeUntil, debounceTime, map } from "rxjs/operators";
 import { LinkMappingService } from "../link-mapping.service";
 import { EventManagerService } from "../event-manager.service";
 
@@ -66,16 +66,15 @@ export class LinkMappingComponent implements OnInit {
     );
   }
 
-  addLinkMapping(form: NgForm) {
+  createLinkMapping(form: NgForm) {
     this.resetErrors();
     const data: ILinkMapping = {
-      id: null,
       shortLink: this.shortLink,
       targetUrl: this.targetUrl,
     };
-    this.linkMappingService.store(data).subscribe(
-      (res: ILinkMapping[]) => {
-        this.linkMappingData = res;
+    this.linkMappingService.create(data).subscribe(
+      (res: ILinkMapping) => {
+        this.linkMappingData.push(res);
         this.broadcastSuccess("Created successfully");
         // Reset the form
         form.reset();
@@ -87,20 +86,23 @@ export class LinkMappingComponent implements OnInit {
   updateLinkMapping(id: number, shortLink: string, targetUrl: string) {
     this.resetErrors();
     const data: ILinkMapping = {
-      id: id,
       shortLink: shortLink,
       targetUrl: targetUrl,
     };
-    this.linkMappingService.update(data).subscribe(
-      (res: ILinkMapping[]) => {
-        this.linkMappingData = res;
+    this.linkMappingService.update(id, data).subscribe(
+      (res: ILinkMapping) => {
+        const found = this.linkMappingData.find(x => {
+          return x.id === Number(res.id);
+        });
+        found.shortLink = res.shortLink;
+        found.targetUrl = res.targetUrl;
         this.broadcastSuccess("Updated successfully");
       },
       (err) => this.broadcastError(err)
     );
   }
 
-  deleteLink(id: number) {
+  deleteLinkMapping(id: number) {
     this.resetErrors();
 
     this.linkMappingService.delete(id).subscribe(
