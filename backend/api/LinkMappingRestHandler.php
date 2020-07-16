@@ -73,6 +73,7 @@ class LinkMappingRestHandler extends SimpleRest
 			$this->checkPayloadData($jsonPayload);
 			$persistenceService->updateIds($jsonPayload);
 			$persistenceService->saveToFile($jsonPayload);
+			$this->encodeResponse($jsonPayload, 200);
 		} else {
 			$this->encodeResponse(array('error' => 'JSON data not exists'), 400);
 		}

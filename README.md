@@ -48,10 +48,11 @@ Der "Simple URL-Shortener" verfügt über eine REST-API die folgende Endpunkte u
 | Endpoint                | Action                                      | Request / Response Examples                           | Authentication required |
 |:------------------------|:--------------------------------------------|-------------------------------------------------------|-------------------------|
 | `POST /authenticate`    | Prüft ob die Zugangsdaten korrekt sind      | [Check Authentication](#check-authentication-request) | no                      |
-| `GET /mapping`          | Liefert alle "Link-Mappings"                  | [List Mappings](#list-mappings-request)               | yes                     |
-| `POST /mapping`         | Erstellt ein "Link-Mapping"                   | [Create link](#create-link-request)                   | yes                     |
-| `PUT /mapping/{id}`     | Aktualisiert das "Link-Mapping"                  | [Update link](#update-link-request)                   | yes                     |
-| `DELETE /mapping/{id}`  | Löscht das "Link-Mapping"                         | [Delete link](#delete-link-request)                   | yes                     |
+| `GET /mapping`          | Liefert alle "Link-Mappings"                | [List Mappings](#list-mappings-request)               | yes                     |
+| `POST /mapping`         | Erstellt ein "Link-Mapping"                 | [Create link](#create-link-request)                   | yes                     |
+| `POST /mapping-all`     | Erstellt alle "Link-Mappings"               | [Create all link](#create-all-link-request)           | yes                     |
+| `PUT /mapping/{id}`     | Aktualisiert das "Link-Mapping"             | [Update link](#update-link-request)                   | yes                     |
+| `DELETE /mapping/{id}`  | Löscht das "Link-Mapping"                   | [Delete link](#delete-link-request)                   | yes                     |
 
 Für alle Endpunkte die eine Authentifizierung erfordern muss in dem Request ein **"Authorization"**-Feld im Header mit den gültigen Zugangsdaten angegeben werden.
 
@@ -124,6 +125,60 @@ Mit dem Befehl `POST /mapping` kann ein neues "Link-Mapping" erstellt werden.
         "shortLink": "TestLink",
         "targetUrl": "https:\/\/www.youtube.com\/watch?v=9ryBJSbCqWw&list=PLRkXN1HP7lKtZCH29DQof93Me9fT-FGQ6"
     }
+```
+
+### Create All Link Request
+
+Mit dem Befehl `POST /mapping-all` können alle "Link-Mappings" (auf ein mal) erstellt werden.
+
+* Request, Beispiel-Payload:
+
+```json
+[
+    {
+        "shortLink": "Link1",
+        "targetUrl": "https://www.youtube.com/watch?v=6cjCOZ1s18Y"
+    },
+    {
+        "shortLink": "Link2",
+        "targetUrl": "https://www.youtube.com/watch?v=FdFV93DmNfU"
+    },
+    {
+        "shortLink": "Link3",
+        "targetUrl": "https://www.youtube.com/watch?v=lfDwqY1l4UU&t=3s"
+    },
+    {
+        "shortLink": "Link4",
+        "targetUrl": "https://www.youtube.com/watch?v=qhWYonEkNGw"
+    }
+]
+```
+
+* Beispiel einer erfolgreichen Antwort:
+
+```json
+[
+    {
+        "id": 1,
+        "shortLink": "Link1",
+        "targetUrl": "https:\/\/www.youtube.com\/watch?v=6cjCOZ1s18Y"
+    },
+    {
+        "id": 2,
+        "shortLink": "Link2",
+        "targetUrl": "https:\/\/www.youtube.com\/watch?v=FdFV93DmNfU"
+    },
+    {
+        "id": 3,
+        "shortLink": "Link3",
+        "targetUrl": "https:\/\/www.youtube.com\/watch?v=lfDwqY1l4UU&t=3s"
+    },
+    {
+        "id": 4,
+        "shortLink": "Link4",
+        "targetUrl": "https:\/\/www.youtube.com\/watch?v=qhWYonEkNGw"
+    }
+]
 ```
 
 ### Update Link Request
