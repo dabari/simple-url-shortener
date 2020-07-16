@@ -129,7 +129,7 @@ Mit dem Befehl `POST /mapping` kann ein neues "Link-Mapping" erstellt werden.
 
 ### Create All Link Request
 
-Mit dem Befehl `POST /mapping-all` können alle "Link-Mappings" (auf ein mal) erstellt werden.
+Mit dem Befehl `POST /mapping-all` können alle "Link-Mappings" (auf ein mal) erstellt werden. ACHTUNG: alle vorhandenen Links werden dadurch überschrieben!!!
 
 * Request, Beispiel-Payload:
 
